@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>K4LLU ASIF </title>
+    <style>
+        :root { --primary: #bc13fe; --secondary: #ff8c00; --bg: rgba(7, 7, 10, 0.99); }
+        body, html { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        #main-frame { width: 100%; height: 100%; border: none; }
+
+        #rakib-bot {
+            position: absolute; top: 80px; left: 15px; width: 200px;
+            background: var(--bg); border: 1.5px solid var(--primary);
+            border-radius: 15px; box-shadow: 0 0 25px rgba(188, 19, 254, 0.6);
+            z-index: 9999; touch-action: none; backdrop-filter: blur(12px);
+        }
+
+        #mini-icon {
+            position: absolute; top: 80px; left: 15px; width: 60px; height: 60px;
+            background: radial-gradient(circle at 30% 30%, var(--primary), #1a0026);
+            border-radius: 50%; display: none; z-index: 10000; cursor: pointer;
+            box-shadow: 0 0 15px var(--primary); border: 2px solid #fff;
+            justify-content: center; align-items: center; color: #fff; font-weight: 900; font-size: 18px;
+        }
+
+        .header { padding: 8px; font-size: 10px; font-weight: 900; color: #fff; background: var(--primary); cursor: move; display: flex; justify-content: space-between; border-radius: 13px 13px 0 0; }
+        .min-btn { width: 18px; height: 18px; background: #fff; border-radius: 50%; cursor: pointer; color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        #news-bar { background: rgba(0,0,0,0.5); color: #00ff41; font-size: 8px; padding: 2px 0; border-bottom: 1px solid rgba(188, 19, 254, 0.1); text-align: center; }
+        .container { padding: 10px; text-align: center; }
+        .input-box { width: 85%; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 12px; margin-bottom: 8px; outline: none; }
+        .btn-3d { background: linear-gradient(145deg, var(--primary), #8e2de2); color: #fff; border: none; padding: 8px; cursor: pointer; width: 100%; border-radius: 8px; font-weight: 800; font-size: 10px; text-transform: uppercase; margin-bottom: 5px; }
+
+        #accuracy-bar { font-size: 8px; color: #00ff41; margin-bottom: 5px; font-weight: bold; letter-spacing: 0.5px; }
+        .result-text { font-size: 34px; font-weight: 900; margin: 2px 0; color: #fff; text-shadow: 0 0 15px var(--primary); }
+        #timer-box { font-size: 12px; font-weight: bold; color: var(--secondary); margin-bottom: 5px; border: 1px solid var(--secondary); border-radius: 4px; display: inline-block; padding: 1px 8px; }
+        
+        .label { font-size: 9px; color: #888; margin: 2px 0; }
+        .val { color: var(--secondary); font-weight: bold; }
+        
+        #pStatus { font-size: 10px; font-weight: 900; margin-top: 5px; text-transform: uppercase; }
+
+        .link-item { display: block; margin-top: 8px; padding: 6px; background: #0088cc; border-radius: 6px; color: #fff !important; text-decoration: none; font-size: 10px; font-weight: bold; }
+        .home-btn { margin-top: 8px; color: var(--secondary); font-size: 9px; text-decoration: underline; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <iframe id="main-frame" src="https://dkwin8.com"></iframe>
+
+    <div id="mini-icon" onclick="maximize()">3X</div>
+
+    <div id="rakib-bot">
+        <div class="header" id="drag-zone">
+            <span>K4LLU ASIF </span>
+            <div class="min-btn" onclick="minimize()">−</div>
+        </div>
+        <div id="news-bar">
+            <marquee scrollamount="3">LOGIN NOW।  </marquee>
+        </div>
+        <div class="container">
+            <div id="login-panel">
+                <input type="text" id="passInput" class="input-box" placeholder="PASSWORD">
+                <button class="btn-3d" onclick="login()">ACTIVATE NOW</button>
+                <a href="https://t.me/ASIFMN" target="_blank" style="color:var(--primary); font-size:9px; text-decoration:none; display:block;">GET KEY FROM RAKIB</a>
+            </div>
+
+            <div id="prediction-screen" style="display:none;">
+                <div id="mode-ui">
+                    <button class="btn-3d" onclick="startEng('30S')">WIN GO 30S ⚡</button>
+                    <button class="btn-3d" onclick="startEng('1M')">WIN GO 1M ⚡</button>
+                </div>
+                <div id="live-ui" style="display:none;">
+                    <div id="accuracy-bar">● ANALYZING ENGINE...</div>
+                    <div id="timer-box">00:00</div>
+                    <div id="data-display">
+                        <div class="label">PERIOD: <span id="pID" class="val">----</span></div>
+                        <div id="pRes" class="result-text">WAIT</div>
+                    </div>
+                    <div id="pStatus">--</div>
+                    <button class="btn-3d" style="font-size: 8px; padding: 4px; margin-top: 5px;" onclick="location.reload()">BACK</button>
+                </div>
+                <a href="https://t.me/ASIFMN" target="_blank" class="link-item">TELEGRAM GROUP</a>
+                <div class="home-btn" onclick="document.getElementById('main-frame').src='https://18bdwin24.com'">HOME</div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const SECRET = "xx";
+    let api = "", last = "", cur = "", steps = 0, gameMode = "";
+    let isStopped = false;
+    const bot = document.getElementById("rakib-bot");
+    const icon = document.getElementById("mini-icon");
+
+    function initDrag(target, handle) {
+        let ox = 0, oy = 0, isDown = false;
+        const start = (e) => { isDown = true; let cx = e.touches ? e.touches[0].clientX : e.clientX; let cy = e.touches ? e.touches[0].clientY : e.clientY; ox = cx - target.offsetLeft; oy = cy - target.offsetTop; };
+        const move = (e) => { if(!isDown) return; let cx = e.touches ? e.touches[0].clientX : e.clientX; let cy = e.touches ? e.touches[0].clientY : e.clientY; target.style.left = (cx - ox) + "px"; target.style.top = (cy - oy) + "px"; };
+        handle.addEventListener('mousedown', start); handle.addEventListener('touchstart', start);
+        document.addEventListener('mousemove', move); document.addEventListener('touchmove', move, {passive: false});
+        document.addEventListener('mouseup', () => isDown = false); document.addEventListener('touchend', () => isDown = false);
+    }
+    initDrag(bot, document.getElementById('drag-zone'));
+    initDrag(icon, icon);
+
+    function minimize() { bot.style.transform = "scale(0)"; bot.style.opacity = "0"; setTimeout(() => { bot.style.display = 'none'; icon.style.display = 'flex'; icon.style.left = bot.style.left; icon.style.top = bot.style.top; }, 200); }
+    function maximize() { icon.style.display = 'none'; bot.style.display = 'block'; bot.style.left = icon.style.left; bot.style.top = icon.style.top; setTimeout(() => { bot.style.transform = "scale(1)"; bot.style.opacity = "1"; }, 10); }
+
+    function login() {
+        if(document.getElementById('passInput').value === SECRET) {
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('prediction-screen').style.display = 'block';
+        } else { alert("WRONG!"); }
+    }
+
+    function startEng(m) {
+        gameMode = m;
+        document.getElementById('mode-ui').style.display = 'none';
+        document.getElementById('live-ui').style.display = 'block';
+        api = (m === '30S') ? 'https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json?pageSize=30' : 'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?pageSize=30';
+        fetchNow(); setInterval(fetchNow, 2000);
+        setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+        let now = new Date();
+        let seconds = now.getSeconds();
+        let remaining = (gameMode === '30S') ? (30 - (seconds % 30)) : (60 - seconds);
+        document.getElementById('timer-box').innerText = "00:" + (remaining < 10 ? "0" + remaining : remaining);
+        if(remaining <= 5) document.getElementById('timer-box').style.color = "#ff4b2b";
+        else document.getElementById('timer-box').style.color = "var(--secondary)";
+    }
+
+    async function fetchNow() {
+        if(isStopped) {
+            document.getElementById('pRes').innerText = "WAIT";
+            document.getElementById('accuracy-bar').innerText = "● RE-CALIBRATING...";
+            return;
+        }
+        try {
+            const r = await fetch(api); const d = await r.json(); const top = d.data.list[0];
+            if(last !== top.issueNumber) {
+                const hist = d.data.list.slice(0, 25); // মোর ডাটা ফর হানিপ স্টাইল
+                let real = parseInt(top.number) >= 5 ? "BIG" : "SMALL";
+                
+                if(last) {
+                    if(cur === real) { 
+                        document.getElementById('pStatus').innerHTML = `<span style="color:#00ff41">WIN ✅</span>`; 
+                        steps = 0;
+                    } else { 
+                        steps++; 
+                        document.getElementById('pStatus').innerHTML = `<span style="color:#ff4b2b">STEP ${steps+1}</span>`; 
+                    }
+                }
+
+                if(steps >= 3) {
+                    isStopped = true;
+                    document.getElementById('pRes').innerText = "WAIT";
+                    document.getElementById('pStatus').innerHTML = `<span style="color:#ff4b2b">SAFE PAUSE</span>`;
+                    setTimeout(() => { isStopped = false; steps = 0; }, 120000); 
+                    return;
+                }
+
+                // HANIF STYLE ENGINE LOGIC
+                let results = hist.map(x => parseInt(x.number) >= 5 ? "B" : "S");
+                let lastPattern = results.slice(0, 3).join('');
+                
+                let next = "";
+                // প্যাটার্ন রিকগনিশন (হানিপ স্টাইল)
+                if(lastPattern === "BBB" || lastPattern === "SSS") {
+                    next = (lastPattern === "BBB") ? "BIG" : "SMALL"; // ফলো ড্রাগন
+                } else if (lastPattern === "BSB" || lastPattern === "SBS") {
+                    next = (results[0] === "B") ? "SMALL" : "BIG"; // এন্টি-চপিং
+                } else {
+                    // ডিফল্ট ক্যালকুলেশন
+                    let b = results.slice(0, 10).filter(x => x === "B").length;
+                    next = (b >= 5) ? "SMALL" : "BIG";
+                }
+
+                if(steps > 0) next = (cur === "BIG") ? "SMALL" : "BIG";
+                
+                last = top.issueNumber; cur = next;
+                document.getElementById('pID').innerText = (BigInt(top.issueNumber) + 1n).toString().slice(-4);
+                document.getElementById('pRes').innerText = next;
+                document.getElementById('accuracy-bar').innerText = "● CONNECTED";
+            }
+        } catch(e) {}
+    }
+</script>
+</body>
+</html>
